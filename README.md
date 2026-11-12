@@ -29,8 +29,8 @@ You need a domain on Cloudflare DNS (a subdomain like `mail.example.com` works t
 Workers Paid plan, which Email Service sending requires, and Node.js 20+.
 
 ```bash
-git clone https://github.com/sftinc/cfloudflare-agent-inbox
-cd cfloudflare-agent-inbox && npm install
+git clone https://github.com/sftinc/cloudflare-agent-inbox
+cd cloudflare-agent-inbox && npm install
 npx wrangler login
 npm run setup <api hostname>      # hostname optional; without it you get a workers.dev URL
 ```
@@ -54,7 +54,7 @@ The rest — re-running setup, `RETENTION_DAYS`, changing the API hostname — i
 Or have a coding agent such as Claude Code do all of the above. Paste this:
 
 ```text
-Set up Cloudflare Agent Inbox for me: https://github.com/sftinc/cfloudflare-agent-inbox
+Set up Cloudflare Agent Inbox for me: https://github.com/sftinc/cloudflare-agent-inbox
 
 1. Clone it and follow docs/setup.md.
 
@@ -97,11 +97,11 @@ You have an email inbox at <address>, sending as <name>.
 The API is at <api url>, and the admin key is <admin key>.
 
 1. Create the inbox, following
-   https://raw.githubusercontent.com/sftinc/cfloudflare-agent-inbox/main/docs/admin-api.md
+   https://raw.githubusercontent.com/sftinc/cloudflare-agent-inbox/main/docs/admin-api.md
    Keep the api_key it returns. It is shown once, and it is what you authenticate with
    from now on.
 
-2. Read https://raw.githubusercontent.com/sftinc/cfloudflare-agent-inbox/main/docs/agent-api.md
+2. Read https://raw.githubusercontent.com/sftinc/cloudflare-agent-inbox/main/docs/agent-api.md
    for how to send, list, read and reply.
 
 3. Send me a test message at <your address>.
