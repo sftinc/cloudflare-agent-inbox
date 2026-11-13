@@ -64,8 +64,8 @@ Inbox tools — an inbox key, or the admin key with `inbox`:
 
 | Tool | Arguments | |
 |---|---|---|
-| `send_mail` | `to`, `cc`, `bcc`, `subject`, `text`, `html`, `attachments`, `reply_to_id` | Same body as [`POST /send`](agent-api.md#send) |
-| `reply` / `reply_all` | `id`, `to`, `cc`, `bcc`, `text`, `html`, `attachments` | Same as [`POST /messages/:id/reply`](agent-api.md#reply-and-reply-all) and `/reply-all` |
+| `send_mail` | `to`, `cc`, `bcc`, `subject`, `text`, `html`, `attachments`, `reply_to`, `reply_to_id` | Same body as [`POST /send`](agent-api.md#send) |
+| `reply` / `reply_all` | `id`, `to`, `cc`, `bcc`, `reply_to`, `text`, `html`, `attachments` | Same as [`POST /messages/:id/reply`](agent-api.md#reply-and-reply-all) and `/reply-all` |
 | `list_messages` | `direction`, `unread`, `from`, `to`, `subject`, `deleted`, `before`, `after` | Same filters as [`GET /messages`](agent-api.md#list-messages) |
 | `read_message` | `id`, `mark_read` | Marks read unless `mark_read: false` |
 | `mark_unread` | `id` | |

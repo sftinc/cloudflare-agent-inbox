@@ -40,6 +40,8 @@ describe("buildEmail", () => {
     [{ to: [1], subject: "Hi", text: "x" }, "Recipients must be addresses or {address, name}"],
     [{ to: [{ name: "No address" }], subject: "Hi", text: "x" }, "Recipients must be addresses or {address, name}"],
     [{ to: [{ address: "a@x.com", name: "Bad\nName" }], subject: "Hi", text: "x" }, "Recipients must be addresses or {address, name}"],
+    [{ to: "a@x.com", subject: "Hi", text: "x", reply_to: ["a@x.com", "b@x.com"] }, "`reply_to` must be one address or {address, name}"],
+    [{ to: "a@x.com", subject: "Hi", text: "x", reply_to: 1 }, "`reply_to` must be one address or {address, name}"],
     [{ to: "a@x.com", text: "x" }, "`subject` is required"],
     [{ to: "a@x.com", subject: "Hi" }, "`text` or `html` is required"],
     [{ to: "a@x.com", subject: "Hi", text: "" }, "`text` or `html` is required"],
@@ -107,6 +109,17 @@ describe("POST /send", () => {
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ id: expect.any(String), messageId: "cf-123" });
     expect(send).toHaveBeenCalledWith({ from: address, to: ["a@x.com"], subject: "Hi", text: "Hello", html: '<div style="white-space:pre-wrap">Hello</div>' });
+  });
+
+  it("sets Reply-To from reply_to and keeps it on the saved copy", async () => {
+    const { api_key: key } = await createInbox("agent");
+    const send = vi.fn(async () => ({ messageId: "cf-1" }));
+    const body = { to: "a@x.com", subject: "Hi", text: "Hello", reply_to: { address: "team@x.com", name: "Team" } };
+    const res = await api("/send", { method: "POST", key, body }, { EMAIL: { send } as any });
+    expect(send).toHaveBeenCalledWith(expect.objectContaining({ replyTo: { email: "team@x.com", name: "Team" } }));
+    const { id } = (await res.json()) as { id: string };
+    const full = (await (await api(`/messages/${id}`, { key })).json()) as { reply_to: unknown };
+    expect(full.reply_to).toEqual([{ name: "Team", address: "team@x.com" }]);
   });
 
   it("sends under the inbox's name when it has one", async () => {

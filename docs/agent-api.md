@@ -41,6 +41,7 @@ curl -X POST $URL/send -H "Authorization: Bearer $API_KEY" -d '{
 |---|---|
 | `to` | required: an address, or a list of them. Each is `"bob@x.com"` or `{"address":"bob@x.com","name":"Bob"}` |
 | `cc`, `bcc` | optional, same shape |
+| `reply_to` | optional: one address, same shape, sent as the `Reply-To` header so replies go there instead of the inbox |
 | `subject` | required |
 | `text`, `html` | at least one, not blank. Every message goes out with both: html is generated from text (escaped, line breaks kept), and text from html (as Markdown) |
 | `attachments` | optional, see below |
@@ -102,7 +103,7 @@ curl -X POST $URL/messages/01a0…/reply -H "Authorization: Bearer $API_KEY" -d 
   parts. Attachments aren't copied.
 
 This inbox's own address and repeated addresses are dropped. The body takes the `/send` fields:
-`text` or `html` (required, not blank), `attachments`, `bcc`, and `to` / `cc`, which replace the
+`text` or `html` (required, not blank), `attachments`, `bcc`, `reply_to`, and `to` / `cc`, which replace the
 defaults (`"cc": []` for none). Answers as `/send` does, plus 404 for a message not in this inbox.
 A very large original can push a reply over the 5 MiB limit (413); use `/send` with `reply_to_id`
 then.

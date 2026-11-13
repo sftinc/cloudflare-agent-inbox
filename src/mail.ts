@@ -125,7 +125,7 @@ export async function saveSent(
     in_reply_to: message.headers?.["In-Reply-To"] ?? null,
     references: message.headers?.References?.split(/\s+/).filter(Boolean) ?? [],
     from: { name: inbox.name ?? "", address: inbox.address },
-    reply_to: [],
+    reply_to: message.replyTo ? [named(message.replyTo)] : [],
     to: to.map(named),
     cc: cc.map(named),
     bcc: bcc.map(named),

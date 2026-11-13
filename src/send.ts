@@ -67,6 +67,11 @@ export function buildEmail(body: any, from: string | EmailAddress): BuildEmailRe
   if (to.length + cc.length + bcc.length > MAX_RECIPIENTS) {
     return { ok: false, status: 400, error: `At most ${MAX_RECIPIENTS} recipients` };
   }
+  // The send binding takes a single Reply-To.
+  const replyTo = recipients(list(body.reply_to));
+  if (!replyTo || replyTo.length > 1) {
+    return { ok: false, status: 400, error: "`reply_to` must be one address or {address, name}" };
+  }
   if (typeof body.subject !== "string" || body.subject === "") {
     return { ok: false, status: 400, error: "`subject` is required" };
   }
@@ -103,6 +108,7 @@ export function buildEmail(body: any, from: string | EmailAddress): BuildEmailRe
   const message: EmailMessageBuilder = { from, to, subject: body.subject, text, html };
   if (cc.length) message.cc = cc;
   if (bcc.length) message.bcc = bcc;
+  if (replyTo.length) message.replyTo = replyTo[0];
   if (attachments.length) {
     message.attachments = attachments.map((a, i) => ({
       filename: a.filename,
