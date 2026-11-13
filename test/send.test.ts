@@ -111,15 +111,15 @@ describe("POST /send", () => {
     expect(send).toHaveBeenCalledWith({ from: address, to: ["a@x.com"], subject: "Hi", text: "Hello", html: '<div style="white-space:pre-wrap">Hello</div>' });
   });
 
-  it("sets Reply-To from reply_to, without its name, and keeps it on the saved copy", async () => {
+  it("sets Reply-To from reply_to and keeps it on the saved copy", async () => {
     const { api_key: key } = await createInbox("agent");
     const send = vi.fn(async () => ({ messageId: "cf-1" }));
     const body = { to: "a@x.com", subject: "Hi", text: "Hello", reply_to: { address: "team@x.com", name: "Team" } };
     const res = await api("/send", { method: "POST", key, body }, { EMAIL: { send } as any });
-    expect(send).toHaveBeenCalledWith(expect.objectContaining({ replyTo: "team@x.com" }));
+    expect(send).toHaveBeenCalledWith(expect.objectContaining({ replyTo: { email: "team@x.com", name: "Team" } }));
     const { id } = (await res.json()) as { id: string };
     const full = (await (await api(`/messages/${id}`, { key })).json()) as { reply_to: unknown };
-    expect(full.reply_to).toEqual([{ name: "", address: "team@x.com" }]);
+    expect(full.reply_to).toEqual([{ name: "Team", address: "team@x.com" }]);
   });
 
   it("sends under the inbox's name when it has one", async () => {

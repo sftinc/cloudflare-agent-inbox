@@ -108,8 +108,7 @@ export function buildEmail(body: any, from: string | EmailAddress): BuildEmailRe
   const message: EmailMessageBuilder = { from, to, subject: body.subject, text, html };
   if (cc.length) message.cc = cc;
   if (bcc.length) message.bcc = bcc;
-  // Production refuses a named replyTo (E_VALIDATION_ERROR) though the types allow it, so send the address alone.
-  if (replyTo.length) message.replyTo = typeof replyTo[0] === "string" ? replyTo[0] : replyTo[0].email;
+  if (replyTo.length) message.replyTo = replyTo[0];
   if (attachments.length) {
     message.attachments = attachments.map((a, i) => ({
       filename: a.filename,
