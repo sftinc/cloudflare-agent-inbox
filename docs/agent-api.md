@@ -41,7 +41,7 @@ curl -X POST $URL/send -H "Authorization: Bearer $API_KEY" -d '{
 |---|---|
 | `to` | required: an address, or a list of them. Each is `"bob@x.com"` or `{"address":"bob@x.com","name":"Bob"}` |
 | `cc`, `bcc` | optional, same shape |
-| `reply_to` | optional: one address, same shape, sent as the `Reply-To` header so replies go there instead of the inbox |
+| `reply_to` | optional: one address, same shape, sent as the `Reply-To` header so replies go there instead of the inbox. A name is dropped: Cloudflare refuses a named Reply-To |
 | `subject` | required |
 | `text`, `html` | at least one, not blank. Every message goes out with both: html is generated from text (escaped, line breaks kept), and text from html (as Markdown) |
 | `attachments` | optional, see below |
